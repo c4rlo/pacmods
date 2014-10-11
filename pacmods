@@ -1,0 +1,27 @@
+#!/usr/bin/python3
+
+import pyalpm
+import hashlib
+
+BUFSIZE = 65536
+
+h = pyalpm.Handle('/', '/var/lib/pacman')
+db = h.get_localdb()
+for pkg in db.pkgcache:
+    for path, db_md5 in pkg.backup:
+        path = '/' + path
+        md5 = hashlib.md5()
+        try:
+            with open(path, 'rb', BUFSIZE) as f:
+                for chunk in iter(lambda: f.read(BUFSIZE), b''):
+                    md5.update(chunk)
+        except FileNotFoundError:
+            for p, _, _ in pkg.files:
+                if path == '/' + p:
+                    print('{} MISSING ({})'.format(path, pkg.name))
+                    break
+        except PermissionError:
+            print('{} PERMISSION DENIED ({})'.format(path, pkg.name))
+        else:
+            if md5.hexdigest() != db_md5:
+                print(path)
