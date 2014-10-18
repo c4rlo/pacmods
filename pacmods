@@ -1,9 +1,15 @@
 #!/usr/bin/python3
 
-import pyalpm
+import sys, os, os.path
 import hashlib
+import pyalpm
 
 BUFSIZE = 65536
+
+allpaths = set()
+
+def errprint(s):
+    print(s, file=sys.stderr)
 
 h = pyalpm.Handle('/', '/var/lib/pacman')
 db = h.get_localdb()
@@ -18,10 +24,19 @@ for pkg in db.pkgcache:
         except FileNotFoundError:
             for p, _, _ in pkg.files:
                 if path == '/' + p:
-                    print('{} MISSING ({})'.format(path, pkg.name))
+                    errprint('{} MISSING ({})'.format(path, pkg.name))
                     break
-        except PermissionError:
-            print('{} PERMISSION DENIED ({})'.format(path, pkg.name))
+        except PermissionError as e:
+            errprint('{} ({})'.format(e, pkg.name))
         else:
             if md5.hexdigest() != db_md5:
+                print(path)
+    for path, _, _ in pkg.files:
+        allpaths.add('/' + path)
+
+for top in ('/etc', '/usr/local/etc'):
+    for dirpath, dirnames, filenames in os.walk(top, onerror=errprint):
+        for fn in filenames:
+            path = os.path.join(dirpath, fn)
+            if path not in allpaths:
                 print(path)
