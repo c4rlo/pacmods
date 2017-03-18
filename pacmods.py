@@ -42,7 +42,7 @@ def main():
 
     for top in DIRS:
         for dirpath, dirnames, filenames in os.walk(top, onerror=errprint):
-            for d in SKIP_DIRS.get(dirpath, ()):  # TODO make this optional
+            for d in SKIP_DIRS.get(dirpath, ()):
                 with suppress(ValueError):
                     dirnames.remove(d)
             for fn in filenames:
