@@ -8,8 +8,8 @@ url="https://github.com/c4rlo/pacmods"
 license=('MIT')
 depends=('python' 'python-setuptools' 'pyalpm')
 options=(!emptydirs)
-source=()      # TODO
-sha256sums=()  # TODO
+source=("https://github.com/c4rlo/${pkgname}/archive/${pkgver}.tar.gz")
+sha256sums=('b413c09cb03a075acfec88b5366b3d7681e96220f1a8cc79c15d58e1ae7667fc')
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
