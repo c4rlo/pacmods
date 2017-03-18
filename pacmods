@@ -1,42 +1,52 @@
 #!/usr/bin/python3
 
-import sys, os, os.path
 import hashlib
+import os
+import os.path
 import pyalpm
+import sys
+from contextlib import suppress
+
+DIRS = ('/etc', '/usr/local/etc')
+
+SKIP_DIRS = {
+    '/etc/ssl': ('certs',),
+    '/etc/ca-certificates': ('extracted',)
+}
 
 BUFSIZE = 65536
 
-allpaths = set()
 
 def errprint(s):
     print(s, file=sys.stderr)
 
-h = pyalpm.Handle('/', '/var/lib/pacman')
-db = h.get_localdb()
-for pkg in db.pkgcache:
+
+allpaths = set()
+
+for pkg in pyalpm.Handle('/', '/var/lib/pacman').get_localdb().pkgcache:
     for path, db_md5 in pkg.backup:
-        path = '/' + path
         md5 = hashlib.md5()
         try:
-            with open(path, 'rb', BUFSIZE) as f:
-                for chunk in iter(lambda: f.read(BUFSIZE), b''):
-                    md5.update(chunk)
+            f = open('/' + path, 'rb', BUFSIZE)
         except FileNotFoundError:
-            for p, _, _ in pkg.files:
-                if path == '/' + p:
-                    errprint('{} MISSING ({})'.format(path, pkg.name))
-                    break
+            if path in (p for p, _, _ in pkg.files):
+                print('D /{} ({})'.format(path, pkg.name))
         except PermissionError as e:
             errprint('{} ({})'.format(e, pkg.name))
         else:
+            for chunk in iter(lambda: f.read(BUFSIZE), b''):
+                md5.update(chunk)
+            f.close()
             if md5.hexdigest() != db_md5:
-                print(path)
-    for path, _, _ in pkg.files:
-        allpaths.add('/' + path)
+                print('M /{} ({})'.format(path, pkg.name))
+    allpaths.update('/' + path for path, _, _ in pkg.files)
 
-for top in ('/etc', '/usr/local/etc'):
+for top in DIRS:
     for dirpath, dirnames, filenames in os.walk(top, onerror=errprint):
+        for d in SKIP_DIRS.get(dirpath, ()):  # TODO make this optional
+            with suppress(ValueError):
+                dirnames.remove(d)
         for fn in filenames:
             path = os.path.join(dirpath, fn)
             if path not in allpaths:
-                print(path)
+                print('A ' + path)
