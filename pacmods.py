@@ -52,5 +52,6 @@ def main():
                 if path not in allpaths:
                     print('A ' + path)
 
+
 if __name__ == '__main__':
     main()
