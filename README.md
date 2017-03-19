@@ -2,10 +2,10 @@
 
 Arch Linux tool to show changes to the system configuration files.
 
-Example (output abbreviated):
+Example run:
 
 ```
-# pacmods
+# ./pacmods.py
 M /etc/fstab (filesystem)
 M /etc/passwd (filesystem)
 M /etc/systemd/logind.conf (systemd)
@@ -22,15 +22,15 @@ A /etc/profile.d/vim.sh
 
 ## How it works
 
-* `M`odified and `D`eleted config files are detected by looking at the
+* "`M`"odified and "`D`"eleted config files are detected by looking at the
   config files (or "backup files") of each installed package (these are
   [treated specially](https://www.archlinux.org/pacman/pacman.8.html#_handling_config_files_a_id_hcf_a)
   by `pacman`). Modifications are detected by comparing the MD5 checksum of the 
   file against the package database.
-* `A`dded files are all files in `/etc` and `/usr/local/etc` that are not owned
-  by a package. Files in `/etc/ssl/certs` and `/etc/ca-certificates/extracted`
-  are also excluded, as those directories appear to only contain generated
-  files.
+* "`A`"dded files are all files in `/etc` and `/usr/local/etc` that are not
+  owned by a package. Files in `/etc/ssl/certs` and
+  `/etc/ca-certificates/extracted` are also excluded, as those directories
+  appear to only contain generated files.
 
 ## TODO
 
