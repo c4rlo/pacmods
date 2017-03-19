@@ -32,6 +32,17 @@ A /etc/profile.d/vim.sh
   `/etc/ca-certificates/extracted` are also excluded, as those directories
   appear to only contain generated files.
 
+## Installation
+
+* Either [get it from the AUR](https://aur.archlinux.org/packages/pacmods/)
+  ([what's the AUR?](https://wiki.archlinux.org/index.php/Arch_User_Repository)).
+* Or just
+  [download `pacmods.py` from here](https://raw.githubusercontent.com/c4rlo/pacmods/master/pacmods.py)
+  and run it. Note that you must have the
+  [`python`](https://www.archlinux.org/packages/staging/x86_64/python/) and
+  [`pyalpm`](https://www.archlinux.org/packages/extra/x86_64/pyalpm/) packages
+  installed.
+
 ## TODO
 
 * Make the list of config directories (currently `/etc` and `/usr/local/etc`
