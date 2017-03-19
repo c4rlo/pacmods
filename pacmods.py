@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import hashlib
 import os
 import os.path
@@ -49,3 +51,6 @@ def main():
                 path = os.path.join(dirpath, fn)
                 if path not in allpaths:
                     print('A ' + path)
+
+if __name__ == '__main__':
+    main()
