@@ -1,6 +1,6 @@
-# Maintainer: Carlo Teubner <carlo.teubner@gmail.com>
+# Maintainer: Carlo Teubner <carlo@cteubner.net>
 pkgname=pacmods
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=1
 pkgdesc="Tool to show changes to system config files"
 arch=('any')

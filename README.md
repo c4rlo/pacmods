@@ -25,7 +25,7 @@ A /etc/profile.d/vim.sh
 * "`M`"odified and "`D`"eleted config files are detected by looking at the
   config files (or "backup files") of each installed package (these are
   [treated specially](https://www.archlinux.org/pacman/pacman.8.html#_handling_config_files_a_id_hcf_a)
-  by `pacman`). Modifications are detected by comparing the MD5 checksum of the 
+  by `pacman`). Modifications are detected by comparing the MD5 checksum of the
   file against the package database.
 * "`A`"dded files are all files in `/etc` and `/usr/local/etc` that are not
   owned by a package. Files in `/etc/ssl/certs` and
@@ -45,8 +45,8 @@ A /etc/profile.d/vim.sh
 
 ## TODO
 
-* Make the list of config directories (currently `/etc` and `/usr/local/etc`
-  configurable).
+* Make the list of config directories (currently `/etc` and `/usr/local/etc`)
+  configurable.
 * Make the list of excluded files (currently everything in `/etc/ssl/certs` and
   `/etc/ca-certificates/extracted`) configurable; and possibly tweak the
   defaults, if required.
